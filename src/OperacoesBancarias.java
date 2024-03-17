@@ -39,18 +39,21 @@ public class OperacoesBancarias {
         }
     }
 
-    public static void transfer(){
+    public static void transfer() {
         System.out.println("How much money do you want to transfer?");
         double transferenceMoney = sc.nextDouble();
 
         System.out.println("Type the Account Code of the account that you want to transfer:");
         int accountCode = sc.nextInt();
 
-        if ((double) loggedCustomer.get("AccountBalance") >= transferenceMoney){
+        System.out.print("Type your password to complete the operation: ");
+        String passwd = sc.next();
+
+        if (validatePassword(passwd)) {
             HashMap<String, Object> benefited = allCustomers.get(accountCode);
-            if (benefited != null){
-                benefited.put("AccountBalance",((double)benefited.get("AccountBalance") + transferenceMoney));
-                loggedCustomer.put("AccountBalance",((double) loggedCustomer.get("AccountBalance") - transferenceMoney));
+            if (benefited != null) {
+                benefited.put("AccountBalance", ((double) benefited.get("AccountBalance") + transferenceMoney));
+                loggedCustomer.put("AccountBalance", ((double) loggedCustomer.get("AccountBalance") - transferenceMoney));
                 System.out.println("=====OPERATION RESULTS:=====");
                 System.out.println("Benefited: " + benefited.get("Name"));
                 System.out.println("Transference Value: " + transferenceMoney);
@@ -58,7 +61,11 @@ public class OperacoesBancarias {
                 System.out.println("Operation failed: Benefited does not exists.");
             }
         } else {
-            System.out.println("Operation failed: Insufficient funds.");
+            System.out.println("Operation failed: Invalid Password.");
         }
+    }
+
+    public static boolean validatePassword(String passwd){
+        return passwd == loggedCustomer.get("passwd");
     }
 }
