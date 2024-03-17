@@ -16,7 +16,7 @@ public class CadastroCliente {
         System.out.print("Escolha o tipo de conta que quer criar: Corrente(1) Polpança(2): ");
         int userInput = sc.nextInt();
 
-        String accountType = new String();
+        String accountType;
         if (userInput == 1){
             accountType = "Corrente";
         } else {
