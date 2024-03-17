@@ -1,5 +1,9 @@
 import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
+
+
 
 public class OperacoesBancarias {
     private static HashMap<String, Object> loggedCustomer;
@@ -39,7 +43,7 @@ public class OperacoesBancarias {
         }
     }
 
-    public static void transfer() {
+    public static void transfer(){
         System.out.println("How much money do you want to transfer?");
         double transferenceMoney = sc.nextDouble();
 
@@ -48,15 +52,17 @@ public class OperacoesBancarias {
 
         System.out.print("Type your password to complete the operation: ");
         String passwd = sc.next();
-
+        HashMap<String, Object> benefited = allCustomers.get(accountCode);
         if (validatePassword(passwd)) {
-            HashMap<String, Object> benefited = allCustomers.get(accountCode);
             if (benefited != null) {
                 benefited.put("AccountBalance", ((double) benefited.get("AccountBalance") + transferenceMoney));
                 loggedCustomer.put("AccountBalance", ((double) loggedCustomer.get("AccountBalance") - transferenceMoney));
                 System.out.println("=====OPERATION RESULTS:=====");
                 System.out.println("Benefited: " + benefited.get("Name"));
                 System.out.println("Transference Value: " + transferenceMoney);
+                System.out.println("Actual account balance: " + loggedCustomer.get("AccountBalance"));
+                System.out.println("Operation Successful.");
+
             } else {
                 System.out.println("Operation failed: Benefited does not exists.");
             }
@@ -66,6 +72,6 @@ public class OperacoesBancarias {
     }
 
     public static boolean validatePassword(String passwd){
-        return passwd == loggedCustomer.get("passwd");
+        return Objects.equals(passwd, (String) loggedCustomer.get("passwd"));
     }
 }
