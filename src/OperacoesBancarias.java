@@ -7,16 +7,11 @@ import java.util.Scanner;
 
 public class OperacoesBancarias {
     private static HashMap<String, Object> loggedCustomer;
-    private static HashMap<Integer, HashMap<String, Object>> allCustomers;
-
     private static final Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
-        allCustomers = Clientes.generateCustomers();
+        HashMap<Integer, HashMap<String, Object>> allCustomers = Main.allBankUsers;
         loggedCustomer = Clientes.getCostumerById(1, allCustomers);
-        deposit();
-//        withdraw();
-//        withdraw();
-        transfer();
+
     }
 
 
@@ -52,7 +47,7 @@ public class OperacoesBancarias {
 
         System.out.print("Type your password to complete the operation: ");
         String passwd = sc.next();
-        HashMap<String, Object> benefited = allCustomers.get(accountCode);
+        HashMap<String, Object> benefited = Main.allBankUsers.get(accountCode);
         if (validatePassword(passwd)) {
             if (benefited != null) {
                 benefited.put("AccountBalance", ((double) benefited.get("AccountBalance") + transferenceMoney));
