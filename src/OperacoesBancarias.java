@@ -6,34 +6,27 @@ import java.util.Scanner;
 
 
 public class OperacoesBancarias {
-    private static HashMap<String, Object> loggedCustomer;
     private static final Scanner sc = new Scanner(System.in);
-    public static void main(String[] args) {
-        HashMap<Integer, HashMap<String, Object>> allCustomers = Main.allBankUsers;
-        loggedCustomer = Clientes.getCostumerById(1, allCustomers);
-
-    }
-
 
     public static void deposit(){
         System.out.println("How much money do you want to deposit?");
         double value = sc.nextDouble();
-        if (loggedCustomer != null){
-            double oldAccountBalance = (double) loggedCustomer.get("AccountBalance");
+        if (Main.loggedCustomer != null){
+            double oldAccountBalance = (double) Main.loggedCustomer.get("AccountBalance");
             Object newAccountBalance = value + oldAccountBalance;
-            loggedCustomer.put("AccountBalance", newAccountBalance);
+            Main.loggedCustomer.put("AccountBalance", newAccountBalance);
             System.out.println("Operation Successful.");
         }
     }
     public static void withdraw(){
         System.out.println("How much money do you want to withdraw?");
         double value = sc.nextDouble();
-        if (loggedCustomer != null && value <= (double) loggedCustomer.get("AccountBalance")){
-            double oldAccountBalance = (double) loggedCustomer.get("AccountBalance");
+        if (Main.loggedCustomer != null && value <= (double) Main.loggedCustomer.get("AccountBalance")){
+            double oldAccountBalance = (double) Main.loggedCustomer.get("AccountBalance");
             Object newAccountBalance = oldAccountBalance - value;
-            loggedCustomer.put("AccountBalance", newAccountBalance);
+            Main.loggedCustomer.put("AccountBalance", newAccountBalance);
             System.out.println("Operation Successful.");
-        } else if (value > (double) loggedCustomer.get("AccountBalance")){
+        } else if (value > (double) Main.loggedCustomer.get("AccountBalance")){
             System.out.println("Operation failed: Insufficient funds.");
         }
     }
@@ -42,21 +35,25 @@ public class OperacoesBancarias {
         System.out.println("How much money do you want to transfer?");
         double transferenceMoney = sc.nextDouble();
 
-        System.out.println("Type the Account Code of the account that you want to transfer:");
+        System.out.println("Type the 'Account Code' of the account that you want to transfer:");
         int accountCode = sc.nextInt();
 
         System.out.print("Type your password to complete the operation: ");
         String passwd = sc.next();
         HashMap<String, Object> benefited = Main.allBankUsers.get(accountCode);
         if (validatePassword(passwd)) {
-            if (benefited != null) {
-                benefited.put("AccountBalance", ((double) benefited.get("AccountBalance") + transferenceMoney));
-                loggedCustomer.put("AccountBalance", ((double) loggedCustomer.get("AccountBalance") - transferenceMoney));
-                System.out.println("=====OPERATION RESULTS:=====");
-                System.out.println("Benefited: " + benefited.get("Name"));
-                System.out.println("Transference Value: " + transferenceMoney);
-                System.out.println("Actual account balance: " + loggedCustomer.get("AccountBalance"));
-                System.out.println("Operation Successful.");
+            if (validateIfBenefitedExists(accountCode)) {
+                if (validateIfActualCustomerHasEnoughMoney(transferenceMoney)) {
+                    benefited.put("AccountBalance", ((double) benefited.get("AccountBalance") + transferenceMoney));
+                    Main.loggedCustomer.put("AccountBalance", ((double) Main.loggedCustomer.get("AccountBalance") - transferenceMoney));
+                    System.out.println("=====OPERATION RESULTS:=====");
+                    System.out.println("Benefited: " + benefited.get("Name"));
+                    System.out.println("Transference Value: " + transferenceMoney);
+                    System.out.println("Actual account balance: " + Main.loggedCustomer.get("AccountBalance"));
+                    System.out.println("Operation Successful.");
+                } else {
+                    System.out.println("Operation failed: Not enough money.");
+                }
 
             } else {
                 System.out.println("Operation failed: Benefited does not exists.");
@@ -66,7 +63,28 @@ public class OperacoesBancarias {
         }
     }
 
+    public static void showBankOperationsMenu(){
+        System.out.println("BANK OPERATIONS - " + Main.loggedCustomer.get("Name"));
+        System.out.println("Choose your operation: [1]Deposit [2]Withdraw [3]Transference [4]Cancel");
+        int userInput = sc.nextInt();
+        if (userInput == 1){
+            deposit();
+        } else if (userInput == 2){
+            withdraw();
+        } else if (userInput == 3) {
+            transfer();
+        } else {
+            System.out.println("Program finished.");
+        }
+    }
+
     public static boolean validatePassword(String passwd){
-        return Objects.equals(passwd, (String) loggedCustomer.get("passwd"));
+        return Objects.equals(passwd, (String) Main.loggedCustomer.get("passwd"));
+    }
+    public static boolean validateIfBenefitedExists(int accountCode){
+        return null != Main.allBankUsers.get(accountCode);
+    }
+    public static boolean validateIfActualCustomerHasEnoughMoney(double transferenceMoney){
+        return (double) Main.loggedCustomer.get("AccountBalance") > transferenceMoney;
     }
 }
