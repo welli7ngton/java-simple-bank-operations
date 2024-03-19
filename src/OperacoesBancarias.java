@@ -26,7 +26,7 @@ public class OperacoesBancarias {
             Object newAccountBalance = oldAccountBalance - value;
             Main.loggedCustomer.put("AccountBalance", newAccountBalance);
             System.out.println("Operation Successful.");
-        } else if (value > (double) Main.loggedCustomer.get("AccountBalance")){
+        } else {
             System.out.println("Operation failed: Insufficient funds.");
         }
     }
