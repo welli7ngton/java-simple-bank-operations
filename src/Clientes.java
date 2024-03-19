@@ -33,5 +33,3 @@ public class Clientes {
         return allCostumers;
     }
 }
-
-
