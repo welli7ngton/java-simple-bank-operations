@@ -38,6 +38,7 @@ public class CadastroCliente {
 
     public static void showClientData(){
         if (Main.isLogged){
+            System.out.println("===CUSTOMER DATA===");
             System.out.println(getClientName(Main.loggedCustomer));
             System.out.println(getClientAccountType(Main.loggedCustomer));
             System.out.println(getClientAccountBalance(Main.loggedCustomer));
