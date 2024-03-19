@@ -30,16 +30,25 @@ public class CadastroCliente {
         newClient.put("AccountBalance", accountBalance);
         Main.allBankUsers.put(Main.allBankUsers.size()+1, newClient);
         System.out.println("Your 'Account Code is now: (" + Main.allBankUsers.size() + ") Keep this information safe." );
-        return Main.allBankUsers.size();
+        Main.isLogged = true;
+        Main.loggedCustomer = newClient;
+        Main.loggedCustomerCode = Main.allBankUsers.size();
+        return Main.loggedCustomerCode;
     }
 
-    public static Object getClientName(HashMap<String, Object> client){
+    public static void showClientData(){
+        if (Main.isLogged){
+            System.out.println(getClientName(Main.loggedCustomer));
+            System.out.println(getClientAccountType(Main.loggedCustomer));
+            System.out.println(getClientAccountBalance(Main.loggedCustomer));
+        }
+    }
+
+    private static Object getClientName(HashMap<String, Object> client){
         return client.get("Name");
     }
-    public static Object getClientAccountType(HashMap<String, Object> client){
+    private static Object getClientAccountType(HashMap<String, Object> client){
         return client.get("AccountType");
     }
-    public static Object getClientAccountBalance(HashMap<String, Object> client){
-        return client.get("AccountBalance");
-    }
+    private static Object getClientAccountBalance(HashMap<String, Object> client){ return client.get("AccountBalance"); }
 }
