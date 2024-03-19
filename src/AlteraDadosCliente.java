@@ -3,11 +3,13 @@ import java.util.Scanner;
 
 public class AlteraDadosCliente {
 
-    private static final Scanner scAlteraDados = new Scanner(System.in);
+
 
     public static void getClientToChangeData(){
+        Scanner scAlteraDados = new Scanner(System.in);
+
         HashMap<String, Object> client = Main.allBankUsers.get(Main.loggedCustomerCode);
-        System.out.println("MENU - ALTER DATA - CUSTOMER : "+ client.get("Name"));
+        System.out.println("MENU - ALTER DATA - "+ client.get("Name"));
         System.out.println("Type your password:");
         String passwd = scAlteraDados.next();
         Object clientPasswd = client.get("passwd");
@@ -18,6 +20,7 @@ public class AlteraDadosCliente {
             while (true){
                 changesMenu();
                 int userInput = scAlteraDados.nextInt();
+                scAlteraDados.nextLine();
                 if (userInput == 1) {
                     System.out.println("Type the new name: ");
                     String name = scAlteraDados.next();
@@ -34,9 +37,7 @@ public class AlteraDadosCliente {
                     System.out.println("Type a menu value..");
                 }
             }
-
         }
-        scAlteraDados.close();
     }
 
     public static void changesMenu(){
